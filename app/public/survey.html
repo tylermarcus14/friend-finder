@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8">
-  <title>FriendFinder</title>
+  <title>Friend-Finder</title>
 
   <!-- Latest compiled and minified CSS & JS -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
@@ -20,7 +20,7 @@
 <body>
 
   <div class="container">
-
+    
     <h2>Survey Questions</h2>
     <hr>
 
@@ -34,7 +34,7 @@
     <hr>
 
     <h3><strong>Question 1</strong></h3>
-    <!-- <h4>Your question here</h4> -->
+    <h4>You enjoy vibrant social events with lots of people.</h4>
     <select class="chosen-select" id="q1">
       <option value=""></option>
       <option value="1">1 (Strongly Disagree)</option>
@@ -45,7 +45,7 @@
     </select>
 
     <h3><strong>Question 2</strong></h3>
-        <!-- <h4>Your question here</h4> -->
+    <h4>You often spend time exploring unrealistic yet intriguing ideas.</h4>
     <select class="chosen-select" id="q2">
       <option value=""></option>
       <option value="1">1 (Strongly Disagree)</option>
@@ -57,7 +57,7 @@
 
 
     <h3><strong>Question 3</strong></h3>
-        <!-- <h4>Your question here</h4> -->
+    <h4>Your travel plans are more likely to look like a rough list of ideas than a detailed itinerary.</h4>
     <select class="chosen-select" id="q3">
       <option value=""></option>
       <option value="1">1 (Strongly Disagree)</option>
@@ -69,7 +69,7 @@
 
 
     <h3><strong>Question 4</strong></h3>
-       <!-- <h4>Your question here</h4> -->
+    <h4>You often think about what you should have said in a conversation long after it has taken place.</h4>
     <select class="chosen-select" id="q4">
       <option value=""></option>
       <option value="1">1 (Strongly Disagree)</option>
@@ -81,7 +81,7 @@
 
 
     <h3><strong>Question 5</strong></h3>
-       <!-- <h4>Your question here</h4> -->
+    <h4>If your friend is sad about something, your first instinct is to support them emotionally, not try to solve their problem.</h4>
     <select class="chosen-select" id="q5">
       <option value=""></option>
       <option value="1">1 (Strongly Disagree)</option>
@@ -93,7 +93,7 @@
 
 
     <h3><strong>Question 6</strong></h3>
-        <!-- <h4>Your question here</h4> -->
+    <h4>People can rarely upset you.</h4>
     <select class="chosen-select" id="q6">
       <option value=""></option>
       <option value="1">1 (Strongly Disagree)</option>
@@ -105,7 +105,7 @@
 
 
     <h3><strong>Question 7</strong></h3>
-      <!-- <h4>Your question here</h4> -->
+    <h4>You often rely on other people to be the ones to start a conversation and keep it going.</h4>
     <select class="chosen-select" id="q7">
       <option value=""></option>
       <option value="1">1 (Strongly Disagree)</option>
@@ -116,7 +116,7 @@
     </select>
 
     <h3><strong>Question 8</strong></h3>
-        <!-- <h4>Your question here</h4> -->
+    <h4>If you have to temporarily put your plans on hold, you make sure it is your top priority to get back on track as soon as possible.</h4>
     <select class="chosen-select" id="q8">
       <option value=""></option>
       <option value="1">1 (Strongly Disagree)</option>
@@ -127,7 +127,7 @@
     </select>
 
     <h3><strong>Question 9</strong></h3>
-       <!-- <h4>Your question here</h4> -->
+    <h4>You rarely worry if you made a good impression on someone you met.</h4>
     <select class="chosen-select" id="q9">
       <option value=""></option>
       <option value="1">1 (Strongly Disagree)</option>
@@ -138,7 +138,7 @@
     </select>
 
     <h3><strong>Question 10</strong></h3>
-        <!-- <h4>Your question here</h4> -->
+    <h4>It would be a challenge for you to spend the whole weekend all by yourself without feeling bored.</h4>
     <select class="chosen-select" id="q10">
       <option value=""></option>
       <option value="1">1 (Strongly Disagree)</option>
@@ -213,23 +213,50 @@
       event.preventDefault();
 
       // Form validation (a function that varifies is all questions have benn answered)
-    
+      function requiredDone() {
+                var done = true;
+                $(".form-control").each(function () {
+                    if ($(this).val() == "") {
+                        done = false;
+                    }
+                });
+                $(".chosen-select").each(function () {
+                    if ($(this).val() == "") {
+                        done = false;
+                    }
+                });
+                return done;
+            }
 
       // If all required fields are filled
-      if (/*put function name here*/()) {
+      if (requiredDone()) {
         // Create an object for the user"s data
         var userData = {
-         
+                    name: $("#name").val().trim(),
+                    photo: $("#photo").val().trim(),
+                    scores: [
+                        $("#q1").val().trim(),
+                        $("#q2").val().trim(),
+                        $("#q3").val().trim(),
+                        $("#q4").val().trim(),
+                        $("#q5").val().trim(),
+                        $("#q6").val().trim(),
+                        $("#q7").val().trim(),
+                        $("#q8").val().trim(),
+                        $("#q9").val().trim(),
+                        $("#q10").val().trim()
+                    ]
         };
 
         // AJAX post the data to the friends API.
         $.post("/api/friends", userData, function(data) {
 
           // Grab the result from the AJAX post so that the best match's name and photo are displayed.
-         
+          $("#match-name").text(data.name);
+          $("#match-img").attr("src", data.photo);
 
           // Show the modal with the best match
-         
+          $("#results-modal").modal("toggle");
 
         });
       } else {
@@ -240,4 +267,7 @@
 
 </body>
 
+
 </html>
+
+
